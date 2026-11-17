@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "verifiedAt": "2026-11-16T21:55:34.508Z",
+  "testsPassed": 14,
+  "preservedRootAssets": 23,
+  "archivedOriginalFiles": 24,
+  "staticFiles": 61,
+  "emailOrigin": "https://r3-resonance.com",
+  "rootBase": "/",
+  "functions": [
+    "bird-response"
+  ]
+}

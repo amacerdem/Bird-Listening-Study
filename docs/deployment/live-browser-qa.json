@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "verifiedAt": "2026-11-16T21:58:58.974Z",
+  "url": "https://r3-resonance.com/",
+  "rootLanding": true,
+  "languageSwitch": [
+    "tr",
+    "en"
+  ],
+  "emailSignupSent": true,
+  "confirmationDelivered": true,
+  "recoveryDelivered": true,
+  "canonicalEmailCallback": true,
+  "serverVerifiedProfileGate": true,
+  "consoleErrors": [],
+  "previousSiteArchive": "/mi-stm/",
+  "testDataCleaned": true
+}

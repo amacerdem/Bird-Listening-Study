@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.1",
+  "status": "EXAMPLE_ONLY_NOT_MEASURED",
+  "distance_definition": "Schema illustration only. Replace coordinates with a frozen, documented MI extraction and projection.",
+  "reference": {
+    "id": "F01",
+    "label": "Example only",
+    "x": 0.2,
+    "y": 0.2,
+    "f0": {
+      "p10": 122,
+      "median": 145,
+      "p90": 174
+    }
+  },
+  "candidates": [
+    {
+      "id": "EXAMPLE-001",
+      "x": 0.2,
+      "y": 0.2,
+      "text_id": "S001",
+      "voice_family": "V001",
+      "f0": {
+        "p10": 122,
+        "median": 145,
+        "p90": 174
+      },
+      "labels": {
+        "F01": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "audio_url": null
+    },
+    {
+      "id": "EXAMPLE-002",
+      "x": 0.65,
+      "y": 0.5,
+      "text_id": "S001",
+      "voice_family": "V002",
+      "f0": {
+        "p10": 130,
+        "median": 151,
+        "p90": 180
+      },
+      "labels": {
+        "F01": {
+          "x": 0.5,
+          "y": 0.35
+        }
+      },
+      "audio_url": null
+    },
+    {
+      "id": "EXAMPLE-003-OUTSIDE-F0",
+      "x": 0.22,
+      "y": 0.21,
+      "text_id": "S001",
+      "voice_family": "V003",
+      "f0": {
+        "p10": 198,
+        "median": 230,
+        "p90": 270
+      },
+      "labels": {
+        "F01": {
+          "x": 0.04,
+          "y": 0.03
+        }
+      },
+      "audio_url": null
+    }
+  ]
+}

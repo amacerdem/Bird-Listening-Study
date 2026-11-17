@@ -1,0 +1,81 @@
+import {alignResponse,CONTRASTS,draftRequest} from './loop-model.js';
+
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const TARGET='The ship is near the shore.';
+const EXAMPLE='The sip is near the sore.';
+const STEPS=[
+  {name:'Test',verb:'Capture the response',title:'What did the listener understand?',body:'Present a selected recording in competing sound. Ask the listener to type the words they heard before giving feedback.',output:'Typed response + trial context',rule:'Keep the original response. Separate spelling corrections from scored listening errors.'},
+  {name:'Profile',verb:'Locate the difficulty',title:'Find recurring confusions.',body:'Measure local harmonicity, spectral shape and temporal landmarks in the clean target. Relate these features to repeated confusions, phonetic context and masker conditions.',output:'Listener-specific error profile',rule:'Estimate uncertainty before choosing a target. Harmonicity alone is not a difficulty score; aperiodic speech carries useful information.'},
+  {name:'Probe',verb:'Separate cue contributions',title:'Which cue changes the decision?',body:'Vary a specified spectral cue and a specified temporal cue, separately and together. Test whether their contributions compensate or interact.',output:'Cue effects + their interaction',rule:'A two-axis display does not establish independent channels. Candidate recordings need acoustic checks.'},
+  {name:'Train',verb:'Select the next anchor',title:'Use the error to guide the route.',body:'Start from a familiar reference. Select informative, manageable contrasts; request more candidate recordings where the bank lacks coverage.',output:'Targeted candidate request → bank',rule:'Generate → measure → verify → select. Prompt settings alone cannot specify acoustic coordinates.'},
+  {name:'Retest',verb:'Measure transfer',title:'Does learning reach new speech?',body:'Retest with untrained recordings, words and talkers. Compare personalized training with equal-duration general training, then test retention four weeks later.',output:'Independent transfer + retention',rule:'Training accuracy is not the endpoint. Success means better understanding of new speech in noise.'}
+];
+
+export class AdaptiveLoop {
+  constructor(root,{dialog}) {
+    this.root=root;this.dialog=dialog;this.step=0;this.contrast='frication';this.result=null;this.input='';this.context={};
+    root.innerHTML=`<div class="loop-heading"><div><div class="eyebrow"><span class="section-rule"></span> FIG. 02 <span class="intro-divider">/</span> THE ADAPTIVE LOOP</div><h2>Let listening errors guide<br><em>the next anchor.</em></h2></div><p>The same MorphBank. The same personal space.<br>Listener responses determine what to train next.</p></div>
+      <div class="loop-context"><span class="loop-live-dot"></span><span>LINKED TO THE MAP</span><strong id="loopAnchor">—</strong><span id="loopContext">—</span><a href="#space">Adjust anchor ↑</a></div>
+      <div class="loop-nav" role="tablist" aria-label="Adaptive listening workflow">${STEPS.map((s,i)=>`<button id="loopTab${i}" type="button" role="tab" aria-controls="loopStage" aria-selected="${i===0}" tabindex="${i===0?0:-1}" data-loop-step="${i}"><span class="loop-step-number">0${i+1}</span><strong>${s.name}</strong><span class="loop-step-arrow" aria-hidden="true">${i===4?'↺':'→'}</span></button>`).join('')}</div>
+      <div class="loop-stage" id="loopStage" role="tabpanel" aria-labelledby="loopTab0"><div class="loop-stage-copy"><div class="tiny-label" id="loopVerb"></div><h3 id="loopTitle"></h3><p id="loopBody"></p><div class="loop-output"><span>OUTPUT</span><strong id="loopOutput"></strong></div><p class="loop-rule" id="loopRule"></p><button class="loop-next" id="loopNext">Next step <span>→</span></button></div><div class="loop-stage-visual" id="loopVisual"></div></div>
+      <div class="loop-return"><span aria-hidden="true">↳</span><p><strong>Responses update the route.</strong> New recordings enter the same measured bank; each listener receives a different sequence.</p><button id="loopRationale">Scientific rationale <span>↗</span></button></div>
+      <p class="loop-boundary">DESIGN PREVIEW · Text comparison is interactive. Audio trials, MI extraction, listener modelling and generation are not running.</p>`;
+    root.querySelectorAll('[data-loop-step]').forEach(b=>{
+      b.addEventListener('click',()=>this.select(Number(b.dataset.loopStep)));
+      b.addEventListener('keydown',e=>{
+        let next=this.step;if(e.key==='ArrowRight')next=(next+1)%5;else if(e.key==='ArrowLeft')next=(next+4)%5;else if(e.key==='Home')next=0;else if(e.key==='End')next=4;else return;
+        e.preventDefault();this.select(next);root.querySelector(`#loopTab${next}`).focus();
+      });
+    });
+    root.querySelector('#loopNext').addEventListener('click',()=>this.select((this.step+1)%5));
+    root.querySelector('#loopRationale').addEventListener('click',()=>this.rationale());
+    this.select(0);
+  }
+  update(context) {
+    this.context=context;
+    this.root.querySelector('#loopAnchor').textContent=context.anchor_id||'No eligible anchor';
+    this.root.querySelector('#loopContext').textContent=`${context.reference_id} reference · ${context.masker==='speech'?'Human speech':'Other sounds'} · ${context.tmr_db>=0?'+':''}${context.tmr_db.toFixed(1)} dB planned TMR`;
+  }
+  select(index) {
+    this.step=index;const s=STEPS[index];
+    this.root.querySelectorAll('[data-loop-step]').forEach((b,i)=>{b.setAttribute('aria-selected',i===index);b.tabIndex=i===index?0:-1;});
+    this.root.querySelector('#loopStage').setAttribute('aria-labelledby',`loopTab${index}`);
+    for(const [id,val] of [['loopVerb',`0${index+1} / ${s.verb.toUpperCase()}`],['loopTitle',s.title],['loopBody',s.body],['loopOutput',s.output],['loopRule',s.rule]])this.root.querySelector('#'+id).textContent=val;
+    this.root.querySelector('#loopNext').innerHTML=index===4?'Return to test <span>↺</span>':`Continue to ${STEPS[index+1].name.toLowerCase()} <span>→</span>`;
+    this.render();
+  }
+  contrastControl() {
+    return `<label class="loop-select-label" for="cueContrast">ILLUSTRATIVE CONTRAST</label><select id="cueContrast">${Object.entries(CONTRASTS).map(([key,c])=>`<option value="${key}" ${key===this.contrast?'selected':''}>${c.name} · ${c.label}</option>`).join('')}</select>`;
+  }
+  render() {
+    const v=this.root.querySelector('#loopVisual'),c=CONTRASTS[this.contrast];
+    if(this.step===0) {
+      v.innerHTML=`<div class="loop-visual-top"><span>RESPONSE SCORING PREVIEW</span><span>NO AUDIO TRIAL</span></div><div class="loop-transcript"><span>Example target · visible for demonstration</span><p>The <b>ship</b> is near the <b>shore.</b></p></div><form id="responsePreview"><label for="listenerResponse">Enter an example response</label><div class="loop-input-row"><input id="listenerResponse" type="text" maxlength="300" autocomplete="off" autocapitalize="off" spellcheck="false" value="${esc(this.input)}" placeholder="Type a transcription to compare…" required><button type="submit">Compare <span>↗</span></button></div><button id="exampleResponse" type="button" class="loop-example-button">Use example: “The sip is near the sore.”</button></form><div id="responseComparison" class="loop-comparison" aria-live="polite">${this.comparison()}</div><p class="loop-visual-note">The example is independent of the selected bank record. Text edits do not diagnose phoneme errors. Nothing is uploaded or saved.</p>`;
+      v.querySelector('#listenerResponse').addEventListener('input',e=>this.input=e.target.value);
+      v.querySelector('#responsePreview').addEventListener('submit',e=>{e.preventDefault();if(!this.input.trim())return;this.score();});
+      v.querySelector('#exampleResponse').addEventListener('click',()=>{this.input=EXAMPLE;v.querySelector('#listenerResponse').value=this.input;this.score();});
+    } else if(this.step===1) {
+      v.innerHTML=`<div class="loop-visual-top"><span>FROM ERROR TO CANDIDATE CUES</span><span>ILLUSTRATIVE</span></div>${this.contrastControl()}<div class="cue-lanes"><div><span class="cue-letter">S</span><div><small>SPECTRAL</small><strong>${c.spectral}</strong></div><div class="cue-spectrum" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div><span class="cue-letter">T</span><div><small>TEMPORAL</small><strong>${c.temporal}</strong></div><svg viewBox="0 0 120 30" aria-hidden="true"><path d="M0 27H12L22 6H66L80 27H120"/></svg></div><div><span class="cue-letter">×</span><div><small>JOINT STRUCTURE</small><strong>${c.joint}</strong></div><svg viewBox="0 0 120 30" aria-hidden="true"><path d="M0 25Q25 25 40 16T120 8M0 8Q25 8 40 14T120 24"/></svg></div></div><p class="loop-callout">${c.note}</p><div class="loop-profile-note"><span>PERSONAL DIFFICULTY</span><p>Estimate from repeated responses, cue measurements, phonetic context and masker conditions. No listener estimate is available yet.</p></div>`;
+    } else if(this.step===2) {
+      v.innerHTML=`<div class="loop-visual-top"><span>CONTROLLED CUE PROBES</span><span>2 × 2 DESIGN</span></div>${this.contrastControl()}<div class="cue-matrix"><span class="matrix-y">TEMPORAL CUE →</span><div class="matrix-cells"><div><span>S₀ · T₁</span><strong>Temporal change</strong><small>Hold spectral cue matched</small></div><div><span>S₁ · T₁</span><strong>Joint change</strong><small>Estimate the interaction</small></div><div><span>S₀ · T₀</span><strong>Reference condition</strong><small>Same words and masker</small></div><div><span>S₁ · T₀</span><strong>Spectral change</strong><small>Hold temporal cue matched</small></div></div><span class="matrix-x">SPECTRAL CUE →</span></div><p class="loop-visual-note">0 and 1 label cue settings, not absence and presence. S: ${c.spectral.toLowerCase()}; T: ${c.temporal.toLowerCase()}. Validate all four recordings before inferring cue use.</p>`;
+    } else if(this.step===3) {
+      v.innerHTML=`<div class="loop-visual-top"><span>BACK INTO THE SAME MORPHBANK</span><span>DRAFT ONLY</span></div>${this.contrastControl()}<div class="training-path"><div><i>F</i><strong>Familiar anchor</strong><span>Establish the reference</span></div><div><i>Δ</i><strong>Targeted contrasts</strong><span>Feedback + graded steps</span></div><div><i>N</i><strong>New utterances</strong><span>Vary words and talkers</span></div></div><div class="generation-recipe"><span class="tiny-label">CANDIDATE REQUEST · ${c.name}</span><p>${c.words.map(w=>`<span>${w}</span>`).join('')}</p><div><span>ElevenLabs</span><b>→</b><span>MI measurement</span><b>→</b><span>Quality + F0 gate</span><b>→</b><span>Speech bank</span></div></div><button id="inspectTrainingDraft" class="loop-draft-button">Inspect generation brief <span>↗</span></button><p class="loop-visual-note">Proposed training: 4–6 weeks. Candidate generation is not a listening intervention until stimulus quality and task difficulty are validated.</p>`;
+      v.querySelector('#inspectTrainingDraft').addEventListener('click',()=>this.brief());
+    } else {
+      v.innerHTML=`<div class="loop-visual-top"><span>INDEPENDENT OUTCOMES</span><span>PROPOSED</span></div><div class="loop-timeline"><div><span>BEFORE</span><i></i><strong>Baseline</strong><small>Fixed test set</small></div><div><span>4–6 WEEKS</span><i></i><strong>Training</strong><small>Adaptive material</small></div><div><span>IMMEDIATE</span><i></i><strong>Transfer</strong><small>Untrained speech</small></div><div><span>+4 WEEKS</span><i></i><strong>Retention</strong><small>No further training</small></div></div><div class="outcome-pair"><div><span>01 / LISTENER BENEFIT</span><h4>Understand new speech.</h4><p>Word recognition or speech-in-noise threshold on held-out talkers, compared with equal-duration general training.</p></div><div><span>02 / MI VALIDATION</span><h4>Predict unseen errors.</h4><p>Test whether MI features add predictive value beyond phoneme identity, SNR and conventional acoustic descriptors.</p></div></div><p class="loop-visual-note">Evaluate human-speech and non-speech maskers separately. These are success criteria, not observed gains or evidence of restored hearing thresholds.</p>`;
+    }
+    v.querySelector('#cueContrast')?.addEventListener('change',e=>{this.contrast=e.target.value;this.render();v.querySelector('#cueContrast').focus();});
+  }
+  comparison() {
+    if(!this.result)return '<span class="comparison-empty">Compare a response to see word substitutions, omissions and insertions.</span>';
+    return `<div class="comparison-heading"><span>TEXT ALIGNMENT</span><strong>${this.result.edits} word edit${this.result.edits===1?'':'s'}</strong></div><div class="comparison-tokens">${this.result.alignment.map(a=>`<div class="${a.type}"><span>${esc(a.target||'∅')}</span><strong>${esc(a.response||'∅')}</strong><small>${a.type==='match'?'match':a.type}</small></div>`).join('')}</div>`;
+  }
+  score() {this.result=alignResponse(TARGET,this.input);this.root.querySelector('#responseComparison').innerHTML=this.comparison();}
+  brief() {
+    const request=draftRequest({...this.context},this.contrast,this.result);
+    this.dialog('A targeted request for the same bank',`<p class="explanation-lead">Request more examples of a contrast, then measure which recordings actually provide it.</p><p>The selected map anchor, reference and masker settings are attached below. The contrast and text comparison remain illustrative; no participant model has selected them.</p><pre class="loop-json">${esc(JSON.stringify(request,null,2))}</pre><p class="explanation-note">This is a reviewable design brief, not an ElevenLabs API request. No generation has been submitted.</p>`,'MI-STM · GENERATION BRIEF');
+  }
+  rationale() {
+    this.dialog('Why close the loop?',`<p class="explanation-lead">Measure the sound. Observe the response. Test whether targeted practice transfers to new speech.</p><ol class="explanation-steps"><li><div><h3>Cue use differs across listeners.</h3><p>In 30 older adults with sensorineural hearing loss, formant discrimination explained about one third of cue-weighting variance. Audiograms did not predict the identification profile. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7213489/" target="_blank" rel="noopener">Souza et al., 2020 ↗</a></p></div></li><li><div><h3>Personalized phoneme training already exists.</h3><p>A four-week app programme targeted individual phoneme confusions in 21 adult cochlear implant users. Targeted errors improved, but the study lacked a control group. This population is distinct from acoustic hearing-aid users. <a href="https://doi.org/10.1080/14670100.2025.2583654" target="_blank" rel="noopener">Philpott et al., 2025 ↗</a></p></div></li><li><div><h3>Transfer is the unresolved endpoint.</h3><p>In hearing-aid users, some phoneme-training gains persisted for three months without a significant improvement in sentence intelligibility in noise. <a href="https://doi.org/10.1080/14992027.2022.2135032" target="_blank" rel="noopener">Koprowska et al., 2023 ↗</a></p></div></li></ol><details class="explanation-details"><summary>Harmonicity, cue interactions and inference</summary><div><p>Harmonicity can support detection and pitch-related discrimination in noise, but it is not a universal decoding-difficulty measure. Aperiodic consonants carry phonetic information; harmonicity and temporal periodicity are related descriptions. <a href="https://mcdermottlab.mit.edu/papers/McPherson_McDermott_2022_harmonicity_in_noise.pdf" target="_blank" rel="noopener">McPherson et al., 2022 ↗</a> · <a href="https://doi.org/10.3390/biology12121522" target="_blank" rel="noopener">Rajappa et al., 2023 ↗</a></p><p>Measure clean-target cues separately from the external masker. Word errors alone do not identify the phoneme or cue responsible. Validate pronunciation and alignment, then use controlled cue probes to distinguish prediction from causal effects.</p></div></details><p class="explanation-note">The proposed contribution is acoustic-cue-specific personalization with independent prediction and transfer tests. A closed loop alone is not a novel or validated treatment.</p>`,'MI-STM · SCIENTIFIC RATIONALE');
+  }
+}

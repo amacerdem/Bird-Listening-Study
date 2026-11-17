@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="MI-STM research proposal: learned spectrotemporal cues, listener-specific profiling and retained speech-in-noise benefit in sensorineural hearing loss.">
+  <title>MI-STM — Musical Intelligence SpectroTemporal Morphology</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="brief.css">
+  <link rel="stylesheet" href="academic.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to research interface</a>
+  <div class="mi-chamber" aria-hidden="true"><div class="mi-horizon"></div><div class="mi-vignette"></div></div>
+  <header class="topbar">
+    <a href="#space" class="mi-wordmark" aria-label="Musical Intelligence SpectroTemporal Morphology home">MI-STM</a>
+    <a href="#brief" class="brief-header-link">Research brief</a>
+    <div class="header-actions"><a href="#space" class="brief-header-link">Workspace</a><button class="quiet-button" id="briefSourcesButton">References</button><button class="quiet-button" id="architectureButton">Architecture <span>↗</span></button><button class="present-button" id="presentButton">Present <svg viewBox="0 0 16 16"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4"/></svg></button></div>
+  </header>
+  <main id="main">
+    <section class="intro" aria-labelledby="pageTitle"><div><div class="eyebrow"><span class="section-rule"></span> RESEARCH PROPOSAL <span class="intro-divider">/</span> SPEECH PERCEPTION</div><h1 id="pageTitle">Musical Intelligence<br><em>SpectroTemporal Morphology</em></h1></div><p>Learned acoustic cues, individualized auditory training and retained speech recognition in noise.<a class="intro-loop-link" href="#space">Open the stimulus workspace <span>↓</span></a></p></section>
+
+    <section id="labView" aria-label="Interactive spectrotemporal space"><span id="space" class="section-anchor" aria-hidden="true"></span>
+      <div class="workspace">
+        <div class="space-stack">
+        <div class="space-panel speech-open">
+          <div class="plot-top"><div><span class="plot-index">FIG. 01</span><span id="spaceTitle">MI-STM · personal anchor trajectories</span></div><div class="mini-badge">SCHEMATIC BANK · NO MI RUN</div></div>
+          <div id="spaceMount" aria-label="Three-dimensional stimulus control space. Use the adjacent sliders to change spectral, temporal and masker coordinates."></div>
+          <div id="axisLabels" aria-hidden="true"></div>
+          <div class="volume-readout"><span class="tiny-label">REQUESTED POSITION</span><div><span class="spectral-text" id="coordX">0.32</span><i>/</i><span class="temporal-text" id="coordY">0.24</span><i>/</i><span class="masker-text" id="coordZ">+4.8<span>dB</span></span></div></div>
+          <div class="masker-field-key"><i aria-hidden="true"></i><span>Gray cloud · competing sound<small>Illustrative field, not measured spectra</small></span></div>
+          <button id="speechShapeInspect" class="speech-shape-inspect" aria-expanded="true" aria-controls="speechShapeInspector">Speech spectrogram <span>↗</span></button>
+          <section id="speechShapeInspector" class="speech-shape-inspector" aria-label="Speech structure">
+            <div class="speech-shape-heading"><span>SPEECH STRUCTURE</span><button id="closeSpeechShape" aria-label="Close enlarged spectrogram">×</button></div>
+            <canvas id="speechShapeCanvas" aria-label="Procedurally drawn speech structure: Fixed F0 and harmonic frequencies, changing harmonic amplitudes and formant envelopes, broadband aperiodic frication and stop-release energy, and independently varying syllable durations and pauses."></canvas>
+            <p>X changes both harmonic amplitudes and broadband consonant spectra; F0 and harmonic spacing stay fixed. Y changes syllable durations and pauses. Below: harmonic /ɑ/ and aperiodic /s/ spectra, compared with X = 0.</p>
+            <details><summary>Model and sources</summary><p>Every curve is drawn from phonetic parameters; no photograph or recorded spectrogram is stretched. Harmonic frequencies remain at n × F0, with F0 fixed to the reference median. X changes resonance centres, bandwidths and gains independently, plus partial-specific amplitudes. Harmonic energy is normalized at each voiced phase; increasing X does not raise the whole spectrum or its total energy. Unvoiced /s, ʃ/ frication and /p, k, t/ release bursts occupy continuous frequency bands, independently of F0. Their spectral envelopes also redistribute energy with X; they belong to the target speech, not the external masker. Each source spectrum is normalized separately, without claiming equal perceived loudness. These amplitude patterns are illustrative, not measured spectral-distance calibrations. The F0 tolerance controls bank eligibility, not this drawing. Six illustrative consonant–vowel events retain their order while their durations and pauses change on a fixed 3-second axis. The drawing is a source–filter illustration, not measured bank audio or an inverse R³/T³ model; it does not establish intelligibility.</p><p><a href="https://speechprocessingbook.aalto.fi/representations/spectrogram-and-the-stft/" target="_blank" rel="noopener">Aalto · Harmonics and formants ↗</a><a href="https://www.phon.ucl.ac.uk/courses/spsci/acoustics/week2-4.pdf" target="_blank" rel="noopener">UCL · Fricative acoustics ↗</a></p></details>
+          </section>
+          <div class="space-tools"><button id="orbitButton" class="tool-button" aria-label="Toggle gentle rotation" title="Gentle rotation">↻</button><button id="viewButton" class="tool-button" aria-label="Toggle top view" title="Planar / volume view">▧</button><button id="resetCamera" class="tool-button" aria-label="Reset camera" title="Reset camera">⌖</button></div>
+          <div class="space-bottom"><span><span class="anchor-dot"></span><span id="referenceLegend">F · familiar reference</span></span><span><span class="anchor-dot b"></span>Points · stored candidates at each masker level</span><span class="drag-hint">DRAG TO ROTATE <span>↔</span></span></div>
+          <div id="webglFallback" hidden>3D rendering is unavailable in this browser. The parameter controls and anchor metadata remain available.</div>
+        </div>
+      <div id="routePanel" class="route-panel">
+        <div class="route-explainer"><span class="tiny-label">PERSONAL TRAJECTORY · F0-MATCHED ANCHORS</span><strong id="routeDescription">Select anchors with increasing R³ and T³ distance.</strong><span class="route-context" id="routeContext">Discrete recordings · masker level held along the route</span></div>
+        <div class="route-buttons" role="group" aria-label="Anchor trajectory"><button class="active" data-route="joint" aria-pressed="true"><svg viewBox="0 0 28 22"><path d="M3 19L25 3"/></svg>Joint</button><button data-route="spectral" aria-pressed="false"><svg viewBox="0 0 28 22"><path d="M3 19h22V3"/></svg>Spectral first</button><button data-route="temporal" aria-pressed="false"><svg viewBox="0 0 28 22"><path d="M3 19V3h22"/></svg>Temporal first</button></div>
+        <div class="route-transport"><button id="animateRoute" class="route-play" aria-label="Animate selected route">▶</button><input id="routeProgress" type="range" min="0" max="1" step="0.001" value="0" aria-label="Route progress"><output id="routePercent">00%</output><button id="reverseRoute" class="quiet-button" aria-label="Reverse route direction" title="Reverse route direction">F → B</button></div>
+      </div>
+
+        </div>
+        <aside class="controls-panel" aria-label="Stimulus controls">
+          <div class="control-heading"><span class="tiny-label">SELECT A SPEECH ANCHOR</span><button id="resetParameters" title="Reset parameters" aria-label="Reset stimulus controls">Reset ↺</button></div>
+          <div class="axis-control spectral"><div class="axis-heading"><span class="axis-letter">X</span><label for="spectral">Spectral coordinate</label><output for="spectral" id="spectralValue">0.32</output></div><p>R³ projection · normalized bank coordinate</p><input id="spectral" type="range" min="0" max="1" step="0.01" value="0.32" aria-describedby="spectralMeaning"><div class="range-labels"><span>LOW COORDINATE</span><span>HIGH COORDINATE</span></div><span id="spectralMeaning" class="sr-only">Requested normalized R3 distance from the reference. A matching candidate is selected from the pool; no waveform is morphed.</span></div>
+          <div class="axis-control temporal"><div class="axis-heading"><span class="axis-letter">Y</span><label for="temporal">Temporal coordinate</label><output for="temporal" id="temporalValue">0.24</output></div><p>T³ projection · normalized bank coordinate</p><input id="temporal" type="range" min="0" max="1" step="0.01" value="0.24"><div class="range-labels"><span>LOW COORDINATE</span><span>HIGH COORDINATE</span></div></div>
+          <div class="axis-control masker"><div class="axis-heading"><span class="axis-letter">Z</span><label for="masking">Competing sound</label><output for="masking" id="maskingValue">+4.8 <small>dB</small></output></div><p>Target-to-masker ratio · stronger masker ↑</p><input id="masking" type="range" min="0" max="1" step="0.01" value="0.30"><div class="range-labels"><span>+12 dB · EASIER</span><span>−12 dB · HARDER</span></div><div class="segmented" role="group" aria-label="Masker type" aria-describedby="maskerDescription"><button data-masker="speech" aria-pressed="false"><span aria-hidden="true">◖◗</span> Human speech</button><button class="active" data-masker="other" aria-pressed="true"><span class="noise-icon" aria-hidden="true">≋</span> Other sounds</button></div><p class="masker-note" id="maskerDescription">Environmental sounds and non-speech noise.</p></div>
+          <div class="f0-gate"><div class="f0-heading"><span>⌑ &nbsp; F0 CONSTRAINT</span><strong id="f0Reference">145 Hz</strong></div><p>Voiced-F0 distribution matched to reference</p><div class="f0-tolerance"><label for="f0Tolerance">Maximum deviation</label><output id="f0ToleranceValue">3.0 st</output></div><input id="f0Tolerance" type="range" min="1" max="6" step=".5" value="3" aria-label="F0 matching tolerance in semitones"><div class="f0-summary" id="f0Summary">Reference-matched candidates</div></div>
+          <div class="anchor-module"><div class="audio-top"><span class="tiny-label">SELECTED BANK ANCHOR</span><button id="anchorInfo" aria-label="About anchor selection">ⓘ</button></div><div class="selected-anchor"><span class="anchor-symbol">◈</span><strong id="selectedAnchor">P023</strong><span id="poolCount">1,024 candidates</span></div><div class="anchor-distances"><span>R³ <b id="anchorS">0.00</b></span><span>T³ <b id="anchorT">0.00</b></span><span>Δ <b id="anchorError">0.00</b></span></div><div class="anchor-quality" id="anchorQuality">Illustrative coordinates · no engine output</div><button id="inspectAnchor" class="anchor-inspect">Inspect anchor manifest <span>↗</span></button></div>
+        </aside>
+      </div>
+
+
+      <div class="pool-toolbar"><div><span class="tiny-label">BANK STATUS</span><span id="poolStatus">Illustrative dataset · 1,024 candidate coordinates</span></div><div><button id="loadPool">Load bank manifest <span>↗</span></button><button id="resetPool">Demo bank ↺</button><input id="poolFile" type="file" accept="application/json,.json" hidden></div></div>
+      <div class="interpretation-bar"><span class="small-cross">＋</span><p id="interpretationText"><strong>Generate → measure → select.</strong> X/Y select a pool anchor relative to a familiar voice. Z changes the scene after selection. Acoustic distance is not perceptual difficulty.</p><button id="methodsButton">How this is constructed <span>↗</span></button></div>
+
+      <div class="pool-pipeline"><button class="pipeline-stage" id="generatorStage"><span class="pipeline-num">01</span><div><span class="tiny-label">GENERATE</span><strong>ElevenLabs</strong><small>Many voices · matched texts · variants</small></div><span class="pipeline-arrow">↗</span></button><button class="pipeline-stage" id="measureStage"><span class="pipeline-num">02</span><div><span class="tiny-label">MEASURE</span><strong>R³ <i>×</i> T³</strong><small>Describe the output, not the prompt</small></div><span class="pipeline-arrow">↗</span></button><button class="pipeline-stage" id="poolStage"><span class="pipeline-num">03</span><div><span class="tiny-label">CURATE</span><strong>Speech bank</strong><small>Retain valid candidates and provenance</small></div><span class="pipeline-arrow">↗</span></button><button class="pipeline-stage" id="personalStage"><span class="pipeline-num">04</span><div><span class="tiny-label">PERSONALIZE</span><strong>Familiar reference</strong><small>F0 gate → reference-relative anchors</small></div><span class="pipeline-arrow">↗</span></button></div>
+      <div class="bank-toolbar"><div class="map-modes" role="group" aria-label="Coordinate view"><button data-map="bank" aria-pressed="false">01 <strong>Global bank</strong></button><button data-map="personal" class="active" aria-pressed="true">02 <strong>Personal anchors</strong></button></div><p id="mapExplanation">All candidates · measured output coordinates · one matched-content slice</p><span class="bank-population" id="bankPopulation">1,024 candidates / 32 voice IDs</span></div>
+    </section>
+
+    <section id="researchBrief" aria-label="Scientific introduction and research proposal"><span id="brief" class="section-anchor"></span></section>
+
+    <section id="adaptiveLoop" class="adaptive-loop" aria-label="Response-guided training with the same speech bank"></section>
+  </main>
+  <footer class="footer"><div><span class="status-dot"></span> INTERACTIVE CONCEPT <span class="footer-divider">/</span> Schematic data · no generation or MI execution</div><span class="footer-shortcut">F · FULLSCREEN</span></footer>
+  <dialog id="detailDialog" aria-labelledby="dialogTitle"><div class="dialog-top"><div><div class="eyebrow" id="dialogEyebrow">ARCHITECTURE NOTES</div><h2 id="dialogTitle">Architecture</h2></div><button id="closeDialog" aria-label="Close dialog">×</button></div><div id="dialogContent"></div></dialog>
+  <div id="toast" role="status" aria-live="polite"></div><div id="announcer" class="sr-only" aria-live="polite"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

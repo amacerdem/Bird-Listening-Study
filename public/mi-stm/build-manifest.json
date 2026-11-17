@@ -1,0 +1,121 @@
+{
+  "project": "MI-STM",
+  "builtAt": "2026-10-05T03:35:38.345Z",
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 14695,
+      "sha256": "756f5197a2a7ccd503cb7d8c8f7ed942968c74246e12ca548d79ca5555baf243"
+    },
+    {
+      "path": "styles.css",
+      "bytes": 77618,
+      "sha256": "7b7c5032c399472799d3fbc8faddd25e2883d033e7efa1eb8e3bed8e74e88774"
+    },
+    {
+      "path": "brief.css",
+      "bytes": 19142,
+      "sha256": "389cda89a203d0f914ac76ac7cc07af7c5ad02e822db25aaebf4235eb849b9e5"
+    },
+    {
+      "path": "academic.css",
+      "bytes": 24995,
+      "sha256": "3bebd4cf805cd7461100a03c8564cabbbcdd04501cf9617ca3e18ad3ba1c20d1"
+    },
+    {
+      "path": "app.js",
+      "bytes": 24385,
+      "sha256": "6a6986763ead42a564ffa755b91dc3c8692b3109d74eb813f36fa68d196ecccd"
+    },
+    {
+      "path": "space.js",
+      "bytes": 18442,
+      "sha256": "42e3d6f7fc92c5e53c38f229d0090ab075726c7e4e74c7b7ee313097ae113f7f"
+    },
+    {
+      "path": "model.js",
+      "bytes": 604,
+      "sha256": "d01a70f8868efb14e5495d4b900be72213960f9d7c6b715a9290a2aaebd8c760"
+    },
+    {
+      "path": "pool.js",
+      "bytes": 4553,
+      "sha256": "30c972ac1228b7242f2ef897b6c888a0f421c1f07b621f11323a440ba0972902"
+    },
+    {
+      "path": "loop.js",
+      "bytes": 16316,
+      "sha256": "f23efc491f8af1f1b8451beed09fc23c7127b09fa15ab784d6ecb4898b763b96"
+    },
+    {
+      "path": "loop-model.js",
+      "bytes": 3597,
+      "sha256": "3917e37f497aa01305700afc40cf40fa277207faf9d714d141fe0bcfe37b9797"
+    },
+    {
+      "path": "brief.js",
+      "bytes": 9841,
+      "sha256": "18b1d08dd60f8547b13e89f8ce12714318922ec0fe2811af3ce5b3bb31609b24"
+    },
+    {
+      "path": "brief-data.js",
+      "bytes": 22879,
+      "sha256": "c988687efe32821db034e61b33a2ab2cd2d3509451b869139c0d8c343d534d97"
+    },
+    {
+      "path": "brief-figures.js",
+      "bytes": 8638,
+      "sha256": "13a10a245b24f8e8d19a16b068026061ebec66e579cdb6ae0a35152d55f2ee2b"
+    },
+    {
+      "path": "references.js",
+      "bytes": 30376,
+      "sha256": "9d36a42da12dc5e6051fe312525df6c56f279d7fe522a284a799ddea6164766b"
+    },
+    {
+      "path": "speech-shape.js",
+      "bytes": 7558,
+      "sha256": "b8e33486789fcdd7504e67686dce59455a03ca73d4e200a5f1c94daad3d114ac"
+    },
+    {
+      "path": "speech-shape-model.js",
+      "bytes": 5360,
+      "sha256": "7abb2cb36d2b1614cca919d294c28dae037d34161a9a86f3843ea59d9ffb6f19"
+    },
+    {
+      "path": "example-pool.json",
+      "bytes": 1393,
+      "sha256": "1723c14c4f2278ecaba547a435e6f739f036ca7851ac7226cd5454373b55c2e8"
+    },
+    {
+      "path": "assets/InterVariable.woff2",
+      "bytes": 352240,
+      "sha256": "693b77d4f32ee9b8bfc995589b5fad5e99adf2832738661f5402f9978429a8e3"
+    },
+    {
+      "path": "assets/Inter-LICENSE.txt",
+      "bytes": 4380,
+      "sha256": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a"
+    },
+    {
+      "path": "vendor/three.module.js",
+      "bytes": 603113,
+      "sha256": "c8211c69345d2e9949dc7a8ac969380497aa0600a5a8ac6a459c8cd02dd9cb8a"
+    },
+    {
+      "path": "vendor/three.core.js",
+      "bytes": 1403455,
+      "sha256": "eb077d2417f61d3e6d9264c317cabc4ea35769ed6b0ab533067292a550784c20"
+    },
+    {
+      "path": "vendor/OrbitControls.js",
+      "bytes": 38703,
+      "sha256": "b97879c748170baadeb3fb84cea1ffdf4674e283dc06042f34e2acb95a76042c"
+    },
+    {
+      "path": "vendor/LICENSE",
+      "bytes": 1081,
+      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601"
+    }
+  ]
+}
