@@ -13,6 +13,14 @@ The application includes consent, verified email registration, a short profile,
 audio setup, slider practice, interruption handling, local resume, private server
 submission and analysis export. It does not show model predictions to participants.
 
+## Turkish protocol
+
+The complete five-page protocol is available as
+[PDF](docs/protocol/Bird_Deneyi_Protokolu_TR_5_Sayfa.pdf) and
+[editable Word](docs/protocol/Bird_Deneyi_Protokolu_TR_5_Sayfa.docx). It documents
+the actual application flow and clearly identifies the planned pilot, analysis
+decisions and TAR comparisons that must be fixed before the main cohort.
+
 ## Run locally
 
 Use Node.js 22 or later:
